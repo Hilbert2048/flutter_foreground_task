@@ -132,6 +132,7 @@ class IOSNotificationOptions {
   const IOSNotificationOptions({
     this.showNotification = true,
     this.playSound = false,
+    this.enableAudioKeepAlive = false,
   });
 
   /// Whether to show notifications.
@@ -142,11 +143,27 @@ class IOSNotificationOptions {
   /// The default is `false`.
   final bool playSound;
 
+  /// Whether to enable silent audio playback to keep the app alive in the background.
+  ///
+  /// When enabled, a silent AudioUnit stream is played to prevent iOS from suspending
+  /// the app. This requires the `audio` background mode to be enabled in Info.plist:
+  ///
+  /// ```xml
+  /// <key>UIBackgroundModes</key>
+  /// <array>
+  ///   <string>audio</string>
+  /// </array>
+  /// ```
+  ///
+  /// The default is `false`.
+  final bool enableAudioKeepAlive;
+
   /// Returns the data fields of [IOSNotificationOptions] in JSON format.
   Map<String, dynamic> toJson() {
     return {
       'showNotification': showNotification,
       'playSound': playSound,
+      'enableAudioKeepAlive': enableAudioKeepAlive,
     };
   }
 
@@ -154,9 +171,12 @@ class IOSNotificationOptions {
   IOSNotificationOptions copyWith({
     bool? showNotification,
     bool? playSound,
+    bool? enableAudioKeepAlive,
   }) =>
       IOSNotificationOptions(
         showNotification: showNotification ?? this.showNotification,
         playSound: playSound ?? this.playSound,
+        enableAudioKeepAlive:
+            enableAudioKeepAlive ?? this.enableAudioKeepAlive,
       );
 }

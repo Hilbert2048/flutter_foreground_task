@@ -25,6 +25,7 @@ class BackgroundService: NSObject {
   
   private var foregroundTask: ForegroundTask? = nil
   private var taskLifecycleListeners = ForegroundTaskLifecycleListeners()
+  private var audioKeepAliveManager: AudioKeepAliveManager? = nil
   
   func sendData(data: Any?) {
     if isRunningService {
@@ -76,6 +77,7 @@ class BackgroundService: NSObject {
       case .API_START, .API_RESTART:
         requestNotification()
         createForegroundTask()
+        startAudioKeepAliveIfNeeded()
         isRunningService = true
         break
       case .API_UPDATE:
@@ -91,8 +93,10 @@ class BackgroundService: NSObject {
             updateForegroundTask()
           }
         }
+        startAudioKeepAliveIfNeeded()
         break
       case .API_STOP, .APP_TERMINATE:
+        stopAudioKeepAlive()
         destroyForegroundTask()
         removeAllNotification()
         isRunningService = false
@@ -202,5 +206,23 @@ class BackgroundService: NSObject {
   private func destroyForegroundTask() {
     foregroundTask?.destroy()
     foregroundTask = nil
+  }
+  
+  // MARK: - Audio Keep Alive
+  
+  private func startAudioKeepAliveIfNeeded() {
+    if notificationOptions.enableAudioKeepAlive {
+      if audioKeepAliveManager == nil {
+        audioKeepAliveManager = AudioKeepAliveManager()
+      }
+      audioKeepAliveManager?.start()
+    } else {
+      stopAudioKeepAlive()
+    }
+  }
+  
+  private func stopAudioKeepAlive() {
+    audioKeepAliveManager?.stop()
+    audioKeepAliveManager = nil
   }
 }

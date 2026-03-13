@@ -10,14 +10,20 @@ import Foundation
 struct NotificationOptions {
   let showNotification: Bool
   let playSound: Bool
+  let enableAudioKeepAlive: Bool
   
   static func getData() -> NotificationOptions {
     let prefs = UserDefaults.standard
     
     let showNotification = prefs.bool(forKey: SHOW_NOTIFICATION)
     let playSound = prefs.bool(forKey: PLAY_SOUND)
+    let enableAudioKeepAlive = prefs.bool(forKey: ENABLE_AUDIO_KEEP_ALIVE)
     
-    return NotificationOptions(showNotification: showNotification, playSound: playSound)
+    return NotificationOptions(
+      showNotification: showNotification,
+      playSound: playSound,
+      enableAudioKeepAlive: enableAudioKeepAlive
+    )
   }
   
   static func setData(args: Dictionary<String, Any>) {
@@ -25,14 +31,17 @@ struct NotificationOptions {
     
     let showNotification = args[SHOW_NOTIFICATION] as? Bool ?? false
     let playSound = args[PLAY_SOUND] as? Bool ?? false
+    let enableAudioKeepAlive = args[ENABLE_AUDIO_KEEP_ALIVE] as? Bool ?? false
 
     prefs.set(showNotification, forKey: SHOW_NOTIFICATION)
     prefs.set(playSound, forKey: PLAY_SOUND)
+    prefs.set(enableAudioKeepAlive, forKey: ENABLE_AUDIO_KEEP_ALIVE)
   }
   
   static func clearData() {
     let prefs = UserDefaults.standard
     prefs.removeObject(forKey: SHOW_NOTIFICATION)
     prefs.removeObject(forKey: PLAY_SOUND)
+    prefs.removeObject(forKey: ENABLE_AUDIO_KEEP_ALIVE)
   }
 }

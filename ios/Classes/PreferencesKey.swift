@@ -11,6 +11,7 @@ let BACKGROUND_SERVICE_ACTION = "backgroundServiceAction"
 // notification options
 let SHOW_NOTIFICATION = "showNotification"
 let PLAY_SOUND = "playSound"
+let ENABLE_AUDIO_KEEP_ALIVE = "enableAudioKeepAlive"
 
 // notification content
 let NOTIFICATION_CONTENT_TITLE = "notificationContentTitle"

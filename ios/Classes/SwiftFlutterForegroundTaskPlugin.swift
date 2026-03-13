@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import BackgroundTasks
+import AVFoundation
 
 public class SwiftFlutterForegroundTaskPlugin: NSObject, FlutterPlugin {
   // ====================== Plugin ======================
@@ -101,6 +102,15 @@ public class SwiftFlutterForegroundTaskPlugin: NSObject, FlutterPlugin {
     if #available(iOS 13.0, *) {
       SwiftFlutterForegroundTaskPlugin.scheduleAppRefresh()
     }
+    
+    // Re-activate audio session when entering background to ensure keep-alive persists
+    if BackgroundService.sharedInstance.isRunningService {
+      try? AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+    }
+  }
+  
+  public func applicationWillEnterForeground(_ application: UIApplication) {
+    // No-op: audio keep-alive continues running; stopping is handled by stopService()
   }
   
   public func applicationWillTerminate(_ application: UIApplication) {

@@ -150,6 +150,7 @@ class _ExamplePageState extends State<ExamplePage> {
       iosNotificationOptions: const IOSNotificationOptions(
         showNotification: false,
         playSound: false,
+        enableAudioKeepAlive: true,
       ),
       foregroundTaskOptions: ForegroundTaskOptions(
         eventAction: ForegroundTaskEventAction.repeat(5000),
